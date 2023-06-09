@@ -52,7 +52,7 @@ func Run() {
 	}
 
 	task()
-	ticker := time.NewTicker(30 * time.Minute)
+	ticker := time.NewTicker(15 * time.Minute)
 	for range ticker.C {
 		task()
 	}
