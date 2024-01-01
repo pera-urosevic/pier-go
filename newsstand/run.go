@@ -31,7 +31,7 @@ func task() {
 		// fetch feed
 		res, err := net.Fetch(feed)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println(err, feed.Url)
 			continue
 		}
 		feed.Updated = now.Format(time.RFC3339)
