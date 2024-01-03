@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"localhost/pier/database"
 	"localhost/pier/newsstand/models"
+	"localhost/pier/notify"
 	"time"
 
 	"github.com/mmcdole/gofeed"
@@ -16,13 +17,13 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 
 	articles, err := db.HGetAll(database.Ctx, key).Result()
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorInfo("newsstand", "get articles", err)
 	}
 
 	for _, item := range items {
 		data, err := json.Marshal(item)
 		if err != nil {
-			fmt.Println(err)
+			notify.ErrorWarn("newsstand", "json marshal", err)
 			continue
 		}
 
@@ -44,16 +45,12 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 			continue
 		}
 
-		err2 := db.HSet(database.Ctx, key, field, string(data))
-		if err2 != nil {
-			fmt.Println(err2)
-		}
+		db.HSet(database.Ctx, key, field, string(data))
 	}
 
 	for articleField, articleValue := range articles {
 		if articleValue == "" {
 			db.HDel(database.Ctx, key, articleField)
-			fmt.Println("Prune", feed.Id, articleField)
 		}
 	}
 }

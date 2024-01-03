@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"localhost/pier/newsstand/net"
 	"localhost/pier/newsstand/storage"
+	"localhost/pier/notify"
 	"os"
 	"time"
 )
@@ -20,7 +21,7 @@ func task() {
 		now := time.Now()
 		then, err := time.Parse(time.RFC3339, feed.Updated)
 		if err != nil {
-			fmt.Println(err)
+			notify.ErrorWarn("newsstand", "skip fresh time parse", err)
 			then = time.Unix(0, 0)
 		}
 		diff := now.Sub(then).Minutes()
@@ -31,12 +32,12 @@ func task() {
 		// fetch feed
 		res, err := net.Fetch(feed)
 		if err != nil {
-			fmt.Println(err, feed.Url)
+			notify.ErrorAlert("newsstand:fetch", "fetch feed", err)
 			continue
 		}
 		feed.Updated = now.Format(time.RFC3339)
 		status := fmt.Sprintf("Fetched %s [%s]", feed.Id, feed.Updated)
-		fmt.Println(status)
+		notify.Info("newsstand", status)
 
 		// store articles
 		storage.Articles(feed, res.Items)

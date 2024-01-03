@@ -1,22 +1,23 @@
 package main
 
 import (
-	"fmt"
 	"localhost/pier/env"
 	"localhost/pier/monitor"
 	"localhost/pier/newsstand"
+	"localhost/pier/notify"
 	"os"
 )
 
 func main() {
-	fmt.Println("Pier starting")
-
 	env.Load()
+
+	notify.Info("pier", "Starting")
+
 	go monitor.Run()
 	go newsstand.Run()
 
 	done := make(chan os.Signal, 1)
 	<-done
 
-	fmt.Println("Pier ending")
+	notify.Info("pier", "Ending")
 }

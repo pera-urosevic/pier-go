@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"localhost/pier/database"
 	"localhost/pier/monitor/alert"
+	"localhost/pier/notify"
 	"time"
 
 	statsCpu "github.com/shirou/gopsutil/v3/cpu"
@@ -12,7 +13,7 @@ import (
 func cpu() {
 	usage, err := statsCpu.Percent(0, false)
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "get cpu", err)
 		return
 	}
 

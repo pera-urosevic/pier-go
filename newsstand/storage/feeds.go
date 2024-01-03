@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"localhost/pier/database"
 	"localhost/pier/newsstand/models"
+	"localhost/pier/notify"
 )
 
 func Feeds() []*models.Feed {
@@ -15,7 +16,7 @@ func Feeds() []*models.Feed {
 		key := fmt.Sprintf("newsstand:%s:feed", id)
 		hash, err := db.HGetAll(database.Ctx, key).Result()
 		if err != nil {
-			fmt.Println(err)
+			notify.ErrorAlert("newsstand", "get feeds", err)
 			continue
 		}
 		feeds = append(feeds, &models.Feed{

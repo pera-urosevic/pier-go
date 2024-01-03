@@ -3,7 +3,7 @@ package alert
 import (
 	"fmt"
 	"localhost/pier/database"
-	"localhost/pier/monitor/email"
+	"localhost/pier/notify"
 	"strconv"
 )
 
@@ -17,20 +17,19 @@ func Signal(subject string, threshold int, increase bool, text string) {
 
 	res, err := db.HGet(database.Ctx, "monitor:alert", subject).Result()
 	if err != nil {
-		fmt.Println(err)
 		res = "0"
 	}
 	score, err := strconv.Atoi(res)
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "parse score", err)
 		return
 	}
 
 	score = score + 1
-	fmt.Println("alert:", subject, score)
+	notify.Alert("monitor", fmt.Sprintf("%s - %d", subject, score))
 
 	if score >= threshold {
-		email.Send(subject, text)
+		notify.Alert(subject, text)
 		db.HSet(database.Ctx, "monitor:alert", subject, 0)
 		return
 	}

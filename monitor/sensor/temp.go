@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"localhost/pier/database"
 	"localhost/pier/monitor/alert"
+	"localhost/pier/notify"
 	"time"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
@@ -12,7 +13,7 @@ import (
 func temp() {
 	temps, err := statsHost.SensorsTemperatures()
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "get temperature", err)
 		return
 	}
 

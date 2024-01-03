@@ -1,8 +1,8 @@
 package sensor
 
 import (
-	"fmt"
 	"localhost/pier/database"
+	"localhost/pier/notify"
 	"time"
 
 	statsMem "github.com/shirou/gopsutil/v3/mem"
@@ -11,7 +11,7 @@ import (
 func swap() {
 	swap, err := statsMem.SwapMemory()
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "get swap", err)
 		return
 	}
 

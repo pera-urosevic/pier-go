@@ -1,8 +1,8 @@
 package sensor
 
 import (
-	"fmt"
 	"localhost/pier/database"
+	"localhost/pier/notify"
 	"time"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
@@ -15,7 +15,7 @@ const secondsDay = secondsHour * 24
 func sensorUptime() {
 	uptime, err := statsHost.Uptime()
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "get uptime", err)
 		return
 	}
 	days := uptime / secondsDay

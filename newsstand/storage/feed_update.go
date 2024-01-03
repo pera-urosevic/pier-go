@@ -9,8 +9,5 @@ import (
 func FeedUpdate(feed *models.Feed) {
 	db := database.Connect()
 	key := fmt.Sprintf("newsstand:%s:feed", feed.Id)
-	err := db.HSet(database.Ctx, key, "updated", feed.Updated)
-	if err != nil {
-		fmt.Println(err)
-	}
+	db.HSet(database.Ctx, key, "updated", feed.Updated)
 }

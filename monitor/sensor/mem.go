@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"localhost/pier/database"
 	"localhost/pier/monitor/alert"
+	"localhost/pier/notify"
 	"time"
 
 	statsMem "github.com/shirou/gopsutil/v3/mem"
@@ -12,7 +13,7 @@ import (
 func mem() {
 	vm, err := statsMem.VirtualMemory()
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "get virtual memory", err)
 		return
 	}
 

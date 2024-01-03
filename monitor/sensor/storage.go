@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"localhost/pier/database"
 	"localhost/pier/monitor/alert"
+	"localhost/pier/notify"
 	"time"
 
 	statsDisk "github.com/shirou/gopsutil/v3/disk"
@@ -12,7 +13,7 @@ import (
 func storage() {
 	partitions, err := statsDisk.Partitions(true)
 	if err != nil {
-		fmt.Println(err)
+		notify.ErrorAlert("monitor", "get partitions", err)
 		return
 	}
 
@@ -21,7 +22,7 @@ func storage() {
 	for _, partition := range partitions {
 		usage, err := statsDisk.Usage(partition.Mountpoint)
 		if err != nil {
-			fmt.Println(err)
+			notify.ErrorAlert("monitor", "get partition usage", err)
 			continue
 		}
 		if usage.UsedPercent < 1 {
