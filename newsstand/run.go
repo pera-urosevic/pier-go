@@ -32,7 +32,7 @@ func task() {
 		// fetch feed
 		res, err := net.Fetch(feed)
 		if err != nil {
-			notify.ErrorAlert("newsstand:fetch", "fetch feed", err)
+			notify.ErrorAlert("newsstand:fetch", "fetch feed "+feed.Url, err)
 			continue
 		}
 		feed.Updated = now.Format(time.RFC3339)
