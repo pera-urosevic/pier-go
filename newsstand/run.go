@@ -36,7 +36,7 @@ func task() {
 			continue
 		}
 		feed.Updated = now.Format(time.RFC3339)
-		status := fmt.Sprintf("Fetched %s [%s]", feed.Id, feed.Updated)
+		status := fmt.Sprintf("fetched %s", feed.Id)
 		notify.Info("newsstand", status)
 
 		// store articles
