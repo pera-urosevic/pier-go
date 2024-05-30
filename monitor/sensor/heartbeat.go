@@ -3,7 +3,7 @@ package sensor
 import (
 	"time"
 
-	"somnusalis.org/pier/database"
+	"github.com/pera-urosevic/pier/database"
 )
 
 func heartbeat() {

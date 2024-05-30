@@ -1,4 +1,4 @@
-module somnusalis.org/pier/database
+module github.com/pera-urosevic/pier/database
 
 go 1.22
 

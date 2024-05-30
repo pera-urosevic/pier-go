@@ -1,7 +1,7 @@
 package net
 
 import (
-	"somnusalis.org/pier/newsstand/models"
+	"github.com/pera-urosevic/pier/newsstand/models"
 
 	"github.com/mmcdole/gofeed"
 )

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"somnusalis.org/pier/database"
-	"somnusalis.org/pier/notify"
+	"github.com/pera-urosevic/pier/database"
+	"github.com/pera-urosevic/pier/notify"
 )
 
 func Signal(subject string, threshold int, increase bool, text string) {

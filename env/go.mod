@@ -1,4 +1,4 @@
-module somnusalis.org/pier/env
+module github.com/pera-urosevic/pier/env
 
 go 1.22
 

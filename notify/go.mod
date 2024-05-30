@@ -1,4 +1,4 @@
-module somnusalis.org/pier/notify
+module github.com/pera-urosevic/pier/notify
 
 go 1.22
 

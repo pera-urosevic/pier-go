@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"somnusalis.org/pier/database"
+	"github.com/pera-urosevic/pier/database"
 )
 
 // internal

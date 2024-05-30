@@ -3,8 +3,8 @@ package sensor
 import (
 	"time"
 
-	"somnusalis.org/pier/database"
-	"somnusalis.org/pier/notify"
+	"github.com/pera-urosevic/pier/database"
+	"github.com/pera-urosevic/pier/notify"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
 )

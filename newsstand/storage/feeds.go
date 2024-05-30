@@ -3,9 +3,9 @@ package storage
 import (
 	"fmt"
 
-	"somnusalis.org/pier/database"
-	"somnusalis.org/pier/newsstand/models"
-	"somnusalis.org/pier/notify"
+	"github.com/pera-urosevic/pier/database"
+	"github.com/pera-urosevic/pier/newsstand/models"
+	"github.com/pera-urosevic/pier/notify"
 )
 
 func Feeds() []*models.Feed {

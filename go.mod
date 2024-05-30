@@ -1,4 +1,4 @@
-module somnusalis.org/pier
+module github.com/pera-urosevic/pier
 
 go 1.22
 

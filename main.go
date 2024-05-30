@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"somnusalis.org/pier/env"
-	"somnusalis.org/pier/monitor"
-	"somnusalis.org/pier/newsstand"
-	"somnusalis.org/pier/notify"
+	"github.com/pera-urosevic/pier/env"
+	"github.com/pera-urosevic/pier/monitor"
+	"github.com/pera-urosevic/pier/newsstand"
+	"github.com/pera-urosevic/pier/notify"
 )
 
 func main() {

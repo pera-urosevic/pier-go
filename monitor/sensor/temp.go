@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"somnusalis.org/pier/database"
-	"somnusalis.org/pier/monitor/alert"
-	"somnusalis.org/pier/notify"
+	"github.com/pera-urosevic/pier/database"
+	"github.com/pera-urosevic/pier/monitor/alert"
+	"github.com/pera-urosevic/pier/notify"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
 )

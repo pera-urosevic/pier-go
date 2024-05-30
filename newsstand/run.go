@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"somnusalis.org/pier/database"
-	"somnusalis.org/pier/newsstand/net"
-	"somnusalis.org/pier/newsstand/storage"
-	"somnusalis.org/pier/notify"
+	"github.com/pera-urosevic/pier/database"
+	"github.com/pera-urosevic/pier/newsstand/net"
+	"github.com/pera-urosevic/pier/newsstand/storage"
+	"github.com/pera-urosevic/pier/notify"
 )
 
 func task() {
