@@ -3,9 +3,9 @@ package storage
 import (
 	"fmt"
 
-	"github.com/pera-urosevic/pier/database"
-	"github.com/pera-urosevic/pier/newsstand/models"
-	"github.com/pera-urosevic/pier/notify"
+	"pier/database"
+	"pier/newsstand/models"
+	"pier/notify"
 )
 
 func Feeds() []*models.Feed {

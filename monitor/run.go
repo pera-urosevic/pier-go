@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pera-urosevic/pier/monitor/sensor"
+	"pier/monitor/sensor"
 )
 
 func Run() {

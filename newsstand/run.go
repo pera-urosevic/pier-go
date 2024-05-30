@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/pera-urosevic/pier/database"
-	"github.com/pera-urosevic/pier/newsstand/net"
-	"github.com/pera-urosevic/pier/newsstand/storage"
-	"github.com/pera-urosevic/pier/notify"
+	"pier/database"
+	"pier/newsstand/net"
+	"pier/newsstand/storage"
+	"pier/notify"
 )
 
 func task() {

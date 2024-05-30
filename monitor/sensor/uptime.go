@@ -3,8 +3,8 @@ package sensor
 import (
 	"time"
 
-	"github.com/pera-urosevic/pier/database"
-	"github.com/pera-urosevic/pier/notify"
+	"pier/database"
+	"pier/notify"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
 )

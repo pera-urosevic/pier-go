@@ -3,7 +3,7 @@ package storage
 import (
 	"regexp"
 
-	"github.com/pera-urosevic/pier/database"
+	"pier/database"
 )
 
 func feedIds() []string {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pera-urosevic/pier/database"
-	"github.com/pera-urosevic/pier/monitor/alert"
-	"github.com/pera-urosevic/pier/notify"
+	"pier/database"
+	"pier/monitor/alert"
+	"pier/notify"
 
 	statsCpu "github.com/shirou/gopsutil/v3/cpu"
 )

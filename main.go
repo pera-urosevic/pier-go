@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/pera-urosevic/pier/env"
-	"github.com/pera-urosevic/pier/monitor"
-	"github.com/pera-urosevic/pier/newsstand"
-	"github.com/pera-urosevic/pier/notify"
+	"pier/env"
+	"pier/monitor"
+	"pier/newsstand"
+	"pier/notify"
 )
 
 func main() {
