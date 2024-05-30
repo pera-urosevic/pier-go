@@ -71,7 +71,7 @@ func Run() {
 
 	fmt.Println("NEWSTAND")
 
-	// task()
+	task()
 	lastRun := time.Now()
 	ticker := time.NewTicker(5 * time.Second)
 	for range ticker.C {
