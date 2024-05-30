@@ -1,14 +1,18 @@
 package monitor
 
 import (
-	"localhost/pier/monitor/sensor"
+	"fmt"
 	"os"
+
+	"somnusalis.org/pier/monitor/sensor"
 )
 
 func Run() {
 	if os.Getenv("RUN_MONITOR") != "true" {
 		return
 	}
+
+	fmt.Println("MONITOR")
 
 	go sensor.Uptime()
 	go sensor.Storage()

@@ -2,9 +2,10 @@ package storage
 
 import (
 	"fmt"
-	"localhost/pier/database"
-	"localhost/pier/newsstand/models"
-	"localhost/pier/notify"
+
+	"somnusalis.org/pier/database"
+	"somnusalis.org/pier/newsstand/models"
+	"somnusalis.org/pier/notify"
 )
 
 func Feeds() []*models.Feed {

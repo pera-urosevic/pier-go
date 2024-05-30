@@ -1,8 +1,9 @@
 package sensor
 
 import (
-	"localhost/pier/database"
 	"time"
+
+	"somnusalis.org/pier/database"
 )
 
 func heartbeat() {

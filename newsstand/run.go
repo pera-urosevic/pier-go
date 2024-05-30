@@ -2,11 +2,13 @@ package newsstand
 
 import (
 	"fmt"
-	"localhost/pier/newsstand/net"
-	"localhost/pier/newsstand/storage"
-	"localhost/pier/notify"
 	"os"
 	"time"
+
+	"somnusalis.org/pier/database"
+	"somnusalis.org/pier/newsstand/net"
+	"somnusalis.org/pier/newsstand/storage"
+	"somnusalis.org/pier/notify"
 )
 
 func task() {
@@ -47,14 +49,35 @@ func task() {
 	}
 }
 
+func check(lastRun time.Time) bool {
+	key := "newsstand:reload"
+	db := database.Connect()
+	reload := db.Get(database.Ctx, key).Val()
+	if reload != "" {
+		db.Set(database.Ctx, key, "", 0)
+		notification := fmt.Sprintf("reload %s", reload)
+		notify.Info("newsstand", notification)
+		return true
+	}
+	now := time.Now()
+	diff := now.Sub(lastRun).Minutes()
+	return diff >= 15
+}
+
 func Run() {
 	if os.Getenv("RUN_NEWSSTAND") != "true" {
 		return
 	}
 
-	task()
-	ticker := time.NewTicker(15 * time.Minute)
+	fmt.Println("NEWSTAND")
+
+	// task()
+	lastRun := time.Now()
+	ticker := time.NewTicker(5 * time.Second)
 	for range ticker.C {
-		task()
+		if check(lastRun) {
+			task()
+			lastRun = time.Now()
+		}
 	}
 }

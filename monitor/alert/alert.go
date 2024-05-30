@@ -2,9 +2,10 @@ package alert
 
 import (
 	"fmt"
-	"localhost/pier/database"
-	"localhost/pier/notify"
 	"strconv"
+
+	"somnusalis.org/pier/database"
+	"somnusalis.org/pier/notify"
 )
 
 func Signal(subject string, threshold int, increase bool, text string) {

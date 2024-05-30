@@ -3,10 +3,11 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
-	"localhost/pier/database"
-	"localhost/pier/newsstand/models"
-	"localhost/pier/notify"
 	"time"
+
+	"somnusalis.org/pier/database"
+	"somnusalis.org/pier/newsstand/models"
+	"somnusalis.org/pier/notify"
 
 	"github.com/mmcdole/gofeed"
 )

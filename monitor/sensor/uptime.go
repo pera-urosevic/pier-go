@@ -1,9 +1,10 @@
 package sensor
 
 import (
-	"localhost/pier/database"
-	"localhost/pier/notify"
 	"time"
+
+	"somnusalis.org/pier/database"
+	"somnusalis.org/pier/notify"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
 )

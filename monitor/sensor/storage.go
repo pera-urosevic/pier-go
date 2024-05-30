@@ -2,10 +2,11 @@ package sensor
 
 import (
 	"fmt"
-	"localhost/pier/database"
-	"localhost/pier/monitor/alert"
-	"localhost/pier/notify"
 	"time"
+
+	"somnusalis.org/pier/database"
+	"somnusalis.org/pier/monitor/alert"
+	"somnusalis.org/pier/notify"
 
 	statsDisk "github.com/shirou/gopsutil/v3/disk"
 )

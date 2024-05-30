@@ -1,7 +1,7 @@
 package net
 
 import (
-	"localhost/pier/newsstand/models"
+	"somnusalis.org/pier/newsstand/models"
 
 	"github.com/mmcdole/gofeed"
 )

@@ -1,8 +1,9 @@
 package storage
 
 import (
-	"localhost/pier/database"
 	"regexp"
+
+	"somnusalis.org/pier/database"
 )
 
 func feedIds() []string {

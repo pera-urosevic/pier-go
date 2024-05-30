@@ -2,8 +2,9 @@ package notify
 
 import (
 	"fmt"
-	"localhost/pier/database"
 	"time"
+
+	"somnusalis.org/pier/database"
 )
 
 // internal
