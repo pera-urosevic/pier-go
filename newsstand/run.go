@@ -11,7 +11,7 @@ import (
 	"pier/notify"
 )
 
-func task() {
+func task(forced bool) {
 	feeds := storage.Feeds()
 	for _, feed := range feeds {
 		// skip disabled
@@ -19,16 +19,18 @@ func task() {
 			continue
 		}
 
-		// skip fresh
 		now := time.Now()
-		then, err := time.Parse(time.RFC3339, feed.Updated)
-		if err != nil {
-			notify.ErrorWarn("newsstand", "skip fresh time parse", err)
-			then = time.Unix(0, 0)
-		}
-		diff := now.Sub(then).Minutes()
-		if diff < 30 {
-			continue
+		if !forced {
+			// skip fresh
+			then, err := time.Parse(time.RFC3339, feed.Updated)
+			if err != nil {
+				notify.ErrorWarn("newsstand", "skip fresh time parse", err)
+				then = time.Unix(0, 0)
+			}
+			diff := now.Sub(then).Minutes()
+			if diff < 30 {
+				continue
+			}
 		}
 
 		// fetch feed
@@ -49,7 +51,7 @@ func task() {
 	}
 }
 
-func check(lastRun time.Time) bool {
+func check(lastRun time.Time) (bool, bool) {
 	key := "newsstand:reload"
 	db := database.Connect()
 	reload := db.Get(database.Ctx, key).Val()
@@ -57,11 +59,11 @@ func check(lastRun time.Time) bool {
 		db.Set(database.Ctx, key, "", 0)
 		notification := fmt.Sprintf("reload %s", reload)
 		notify.Info("newsstand", notification)
-		return true
+		return true, true
 	}
 	now := time.Now()
 	diff := now.Sub(lastRun).Minutes()
-	return diff >= 15
+	return diff >= 15, false
 }
 
 func Run() {
@@ -71,12 +73,13 @@ func Run() {
 
 	fmt.Println("NEWSTAND")
 
-	task()
+	task(true)
 	lastRun := time.Now()
 	ticker := time.NewTicker(5 * time.Second)
 	for range ticker.C {
-		if check(lastRun) {
-			task()
+		run, force := check(lastRun)
+		if run {
+			task(force)
 			lastRun = time.Now()
 		}
 	}
