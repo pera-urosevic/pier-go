@@ -23,7 +23,7 @@ func Feeds() []*models.Feed {
 		feeds = append(feeds, &models.Feed{
 			Id:       id,
 			Url:      hash["url"],
-			Disabled: hash["disabled"] == "true",
+			Disabled: hash["disabled"] != "",
 			Updated:  hash["updated"],
 		})
 	}
