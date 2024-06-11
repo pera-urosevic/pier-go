@@ -3,7 +3,7 @@ package sensor
 import (
 	"time"
 
-	"pier/database"
+	"pier/monitor/db"
 	"pier/notify"
 
 	statsMem "github.com/shirou/gopsutil/v3/mem"
@@ -16,9 +16,7 @@ func swap() {
 		return
 	}
 
-	db := database.Connect()
-	db.Del(database.Ctx, "monitor:swap")
-	db.HSet(database.Ctx, "monitor:swap", "usage", swap.UsedPercent)
+	db.Set("swap:usage", swap.UsedPercent)
 }
 
 func Swap() {

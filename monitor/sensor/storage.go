@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"pier/database"
 	"pier/monitor/alert"
+	"pier/monitor/db"
 	"pier/notify"
 
 	statsDisk "github.com/shirou/gopsutil/v3/disk"
@@ -18,8 +18,7 @@ func storage() {
 		return
 	}
 
-	db := database.Connect()
-	db.Del(database.Ctx, "monitor:storage")
+	db.Del("storage:%")
 	for _, partition := range partitions {
 		usage, err := statsDisk.Usage(partition.Mountpoint)
 		if err != nil {
@@ -30,7 +29,7 @@ func storage() {
 			continue
 		}
 		alert.Signal("storage usage", 1, usage.UsedPercent > 90.0, fmt.Sprintf("%s - %f", partition.Mountpoint, usage.UsedPercent))
-		db.HSet(database.Ctx, "monitor:storage", partition.Mountpoint, usage.UsedPercent)
+		db.Set("storage:"+partition.Mountpoint, usage.UsedPercent)
 	}
 }
 

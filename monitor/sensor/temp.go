@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"pier/database"
 	"pier/monitor/alert"
+	"pier/monitor/db"
 	"pier/notify"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
@@ -18,11 +18,10 @@ func temp() {
 		return
 	}
 
-	db := database.Connect()
-	db.Del(database.Ctx, "monitor:temp")
+	db.Del("temp:%")
 	for _, temp := range temps {
 		alert.Signal("temp value", 1, temp.Temperature > 70.0, fmt.Sprintf("%s = %f", temp.SensorKey, temp.Temperature))
-		db.HSet(database.Ctx, "monitor:temp", temp.SensorKey, temp.Temperature)
+		db.Set("temp:"+temp.SensorKey, temp.Temperature)
 	}
 }
 

@@ -9,26 +9,31 @@ import (
 
 // internal
 
-func notify(channel string, topic string, message string, expire time.Duration) {
+func notify(channel string, topic string, message string) {
+	fmt.Println(channel, topic, message)
 	db := database.Connect()
-	// timestamp := time.Now().Format("20060102-150405-000000000")
-	timestamp := time.Now().UnixMicro()
-	key := fmt.Sprintf("notify:%s:%d:%s", channel, timestamp, topic)
-	db.Set(database.Ctx, key, message, expire)
+	now := time.Now()
+	_, err := db.Exec("INSERT INTO `notify` (`timestamp`, `channel`, `topic`, `message`) VALUES (?, ?, ?, ?)", now.Unix(), channel, topic, message)
+	if err != nil {
+		fmt.Println(err)
+	}
+	db.Exec("DELETE FROM `notify` WHERE `channel`='info' AND `timestamp` < ?", now.Add(-1*time.Hour).Unix())
+	db.Exec("DELETE FROM `notify` WHERE `channel`='warn' AND `timestamp` < ?", now.Add(-1*time.Hour*24).Unix())
+	db.Exec("DELETE FROM `notify` WHERE `channel`='alert' AND `timestamp` < ?", now.Add(-1*time.Hour*24*7).Unix())
 }
 
 // notifications by type
 
-func Alert(topic string, message string) {
-	notify("alert", topic, message, time.Hour*24*7)
+func Info(topic string, message string) {
+	notify("info", topic, message)
 }
 
 func Warn(topic string, message string) {
-	notify("warn", topic, message, time.Hour*24)
+	notify("warn", topic, message)
 }
 
-func Info(topic string, message string) {
-	notify("info", topic, message, time.Hour)
+func Alert(topic string, message string) {
+	notify("alert", topic, message)
 }
 
 // utils

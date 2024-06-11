@@ -3,7 +3,7 @@ package sensor
 import (
 	"time"
 
-	"pier/database"
+	"pier/monitor/db"
 	"pier/notify"
 
 	statsHost "github.com/shirou/gopsutil/v3/host"
@@ -22,9 +22,8 @@ func sensorUptime() {
 	days := uptime / secondsDay
 	hours := (uptime % secondsDay) / secondsHour
 
-	db := database.Connect()
-	db.Del(database.Ctx, "monitor:uptime")
-	db.HSet(database.Ctx, "monitor:uptime", "days", days, "hours", hours)
+	db.Set("uptime:days", days)
+	db.Set("uptime:hours", hours)
 }
 
 func Uptime() {

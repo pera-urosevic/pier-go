@@ -4,20 +4,18 @@ import (
 	"fmt"
 	"strconv"
 
-	"pier/database"
+	"pier/monitor/db"
 	"pier/notify"
 )
 
 func Signal(subject string, threshold int, increase bool, text string) {
-	db := database.Connect()
-
 	if !increase {
-		db.HSet(database.Ctx, "monitor:alert", subject, 0)
+		db.Set("alert:"+subject, 0)
 		return
 	}
 
-	res, err := db.HGet(database.Ctx, "monitor:alert", subject).Result()
-	if err != nil {
+	res := db.Get("alert:" + subject)
+	if res == "" {
 		res = "0"
 	}
 	score, err := strconv.Atoi(res)
@@ -31,8 +29,8 @@ func Signal(subject string, threshold int, increase bool, text string) {
 
 	if score >= threshold {
 		notify.Alert(subject, text)
-		db.HSet(database.Ctx, "monitor:alert", subject, 0)
+		db.Set("alert:"+subject, 0)
 		return
 	}
-	db.HSet(database.Ctx, "monitor:alert", subject, score)
+	db.Set("alert"+subject, score)
 }

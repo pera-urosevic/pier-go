@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"pier/database"
 	"pier/monitor/alert"
+	"pier/monitor/db"
 	"pier/notify"
 
 	statsMem "github.com/shirou/gopsutil/v3/mem"
@@ -19,10 +19,7 @@ func mem() {
 	}
 
 	alert.Signal("mem usage", 2, vm.UsedPercent > 90.0, fmt.Sprintf("%f", vm.UsedPercent))
-
-	db := database.Connect()
-	db.Del(database.Ctx, "monitor:mem")
-	db.HSet(database.Ctx, "monitor:mem", "usage", vm.UsedPercent)
+	db.Set("mem:usage", vm.UsedPercent)
 }
 
 func Mem() {

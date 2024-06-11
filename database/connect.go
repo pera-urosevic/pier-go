@@ -1,21 +1,31 @@
 package database
 
 import (
+	"database/sql"
 	"os"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/go-sql-driver/mysql"
 )
 
-var db *redis.Client
+var db *sql.DB
 
-func Connect() *redis.Client {
-
+func Connect() *sql.DB {
 	if db == nil {
-		redis.SetLogger(nil)
-		db = redis.NewClient(&redis.Options{
-			Addr:     os.Getenv("REDIS_URL"),
-			Password: os.Getenv("REDIS_PASSWORD"),
-		})
+		cfg := mysql.Config{
+			User:                 os.Getenv("DB_USER"),
+			Passwd:               os.Getenv("DB_PASSWORD"),
+			Net:                  "tcp",
+			Addr:                 os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT"),
+			DBName:               os.Getenv("DB_NAME"),
+			AllowNativePasswords: true,
+			ParseTime:            true,
+		}
+
+		var err error
+		db, err = sql.Open("mysql", cfg.FormatDSN())
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return db

@@ -1,8 +1,10 @@
 package models
 
 type Feed struct {
-	Id       string
+	Name     string
 	Url      string
+	Web      string
+	Tokens   string
+	Updated  int64
 	Disabled bool
-	Updated  string
 }

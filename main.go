@@ -5,8 +5,8 @@ import (
 
 	"pier/env"
 	"pier/monitor"
-	"pier/newsstand"
 	"pier/notify"
+	"pier/reader"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	notify.Info("pier", "starting")
 
 	go monitor.Run()
-	go newsstand.Run()
+	go reader.Run()
 
 	done := make(chan os.Signal, 1)
 	<-done
