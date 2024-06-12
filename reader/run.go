@@ -44,6 +44,8 @@ func task() {
 		// store meta
 		storage.FeedUpdate(feed)
 	}
+	// cleanup old articles
+	storage.Cleanup()
 }
 
 func check(lastRun time.Time) bool {
