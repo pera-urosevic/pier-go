@@ -12,9 +12,10 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func Articles(feed *models.Feed, items []*gofeed.Item) {
+func Articles(feed *models.Feed, items []*gofeed.Item, threshold time.Duration) {
 	db := database.Connect()
 
+	// get db articles
 	articles := map[string]*models.Article{}
 	rows, err := db.Query("SELECT `id`, `content`, `discarded` FROM `reader_articles` WHERE `feed_name` = ?", feed.Name)
 	if err != nil {
@@ -37,6 +38,7 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 			continue
 		}
 
+		// get article datetime
 		guid := item.GUID
 		var dt time.Time
 		datetime := item.UpdatedParsed
@@ -48,6 +50,11 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 		} else {
 			dt = *datetime
 		}
+		// skip articles that are too old
+		if dt.Before(time.Now().Add(-1 * threshold)) {
+			continue
+		}
+		// skip articles that already exist
 		id := fmt.Sprintf("%s|%s", dt, guid)
 		_, exists := articles[id]
 		if exists {
@@ -55,9 +62,11 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 			continue
 		}
 
+		// add article to db
 		db.Exec("INSERT INTO `reader_articles` (`id`, `feed_name`, `content`, `discarded`) VALUES (?, ?, ?, ?)", id, feed.Name, string(data), 0)
 	}
 
+	// delete discarded articles no longer present in feed
 	for articleId, article := range articles {
 		if article.Discarded {
 			db.Exec("DELETE FROM `reader_articles` WHERE `id` = ?", articleId)

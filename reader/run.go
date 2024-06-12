@@ -11,6 +11,7 @@ import (
 )
 
 const INTERVAL = 20
+const THRESHOLD = time.Hour * 24 * 28
 
 func task() {
 	feeds := storage.Feeds()
@@ -39,13 +40,13 @@ func task() {
 		notify.Info("reader", status)
 
 		// store articles
-		storage.Articles(feed, res.Items)
+		storage.Articles(feed, res.Items, THRESHOLD)
 
 		// store meta
 		storage.FeedUpdate(feed)
 	}
 	// cleanup old articles
-	storage.Cleanup()
+	storage.Cleanup(THRESHOLD)
 }
 
 func check(lastRun time.Time) bool {
