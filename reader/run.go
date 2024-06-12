@@ -23,7 +23,7 @@ func task(forced bool) {
 			// skip fresh
 			then := time.Unix(feed.Updated, 0)
 			diff := now.Sub(then).Minutes()
-			if diff < 30 {
+			if diff < 20 {
 				continue
 			}
 		}
