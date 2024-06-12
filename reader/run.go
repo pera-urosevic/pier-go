@@ -10,7 +10,9 @@ import (
 	"pier/reader/storage"
 )
 
-func task(forced bool) {
+const INTERVAL = 20
+
+func task() {
 	feeds := storage.Feeds()
 	for _, feed := range feeds {
 		// skip disabled
@@ -19,13 +21,11 @@ func task(forced bool) {
 		}
 
 		now := time.Now()
-		if !forced {
-			// skip fresh
-			then := time.Unix(feed.Updated, 0)
-			diff := now.Sub(then).Minutes()
-			if diff < 20 {
-				continue
-			}
+		// skip fresh
+		then := time.Unix(feed.Updated, 0)
+		diff := now.Sub(then).Minutes()
+		if diff < INTERVAL {
+			continue
 		}
 
 		// fetch feed
@@ -46,15 +46,15 @@ func task(forced bool) {
 	}
 }
 
-func check(lastRun time.Time) (bool, bool) {
+func check(lastRun time.Time) bool {
 	reload := storage.Reload()
 	if reload {
 		notify.Info("reader", "reload")
-		return true, true
+		return true
 	}
 	now := time.Now()
 	diff := now.Sub(lastRun).Minutes()
-	return diff >= 15, false
+	return diff >= INTERVAL
 }
 
 func Run() {
@@ -64,13 +64,13 @@ func Run() {
 
 	fmt.Println("READER")
 
-	task(false)
+	task()
 	lastRun := time.Now()
 	ticker := time.NewTicker(5 * time.Second)
 	for range ticker.C {
-		run, force := check(lastRun)
+		run := check(lastRun)
 		if run {
-			task(force)
+			task()
 			lastRun = time.Now()
 		}
 	}
