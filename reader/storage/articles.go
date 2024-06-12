@@ -16,7 +16,7 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 	db := database.Connect()
 
 	articles := map[string]*models.Article{}
-	rows, err := db.Query("SELECT `id`, `content` FROM `reader_articles` WHERE `feed_name` = ?", feed.Name)
+	rows, err := db.Query("SELECT `id`, `content`, `discarded` FROM `reader_articles` WHERE `feed_name` = ?", feed.Name)
 	if err != nil {
 		notify.ErrorAlert("reader", "articles", err)
 		return
@@ -24,7 +24,7 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 	defer rows.Close()
 	for rows.Next() {
 		var article models.Article
-		if err := rows.Scan(&article.Id, &article.Content); err != nil {
+		if err := rows.Scan(&article.Id, &article.Content, &article.Discarded); err != nil {
 			notify.ErrorAlert("reader", "articles", err)
 		}
 		articles[article.Id] = &article
@@ -55,11 +55,11 @@ func Articles(feed *models.Feed, items []*gofeed.Item) {
 			continue
 		}
 
-		db.Exec("INSERT INTO `reader_articles` (`id`, `feed_name`, `content`) VALUES (?, ?, ?)", id, feed.Name, string(data))
+		db.Exec("INSERT INTO `reader_articles` (`id`, `feed_name`, `content`, `discarded`) VALUES (?, ?, ?, ?)", id, feed.Name, string(data), 0)
 	}
 
 	for articleId, article := range articles {
-		if article.Content == "" {
+		if article.Discarded {
 			db.Exec("DELETE FROM `reader_articles` WHERE `id` = ?", articleId)
 		}
 	}
