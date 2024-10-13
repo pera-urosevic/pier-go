@@ -2,6 +2,7 @@ package sensor
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"pier/monitor/alert"
@@ -20,9 +21,12 @@ func storage() {
 
 	db.Del("storage:%")
 	for _, partition := range partitions {
+		if strings.HasPrefix(partition.Mountpoint, "/run") {
+			continue
+		}
 		usage, err := statsDisk.Usage(partition.Mountpoint)
 		if err != nil {
-			notify.ErrorAlert("monitor", "get partition usage", err)
+			notify.ErrorAlert("monitor", "get partition usage ("+partition.Mountpoint+")", err)
 			continue
 		}
 		if usage.UsedPercent < 1 {
