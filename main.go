@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"pier/api"
 	"pier/env"
 	"pier/monitor"
 	"pier/notify"
@@ -16,6 +17,7 @@ func main() {
 
 	go monitor.Run()
 	go reader.Run()
+	go api.Run()
 
 	done := make(chan os.Signal, 1)
 	<-done

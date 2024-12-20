@@ -20,13 +20,11 @@ func Connect() *sql.DB {
 			AllowNativePasswords: true,
 			ParseTime:            true,
 		}
-
 		var err error
 		db, err = sql.Open("mysql", cfg.FormatDSN())
 		if err != nil {
 			panic(err)
 		}
 	}
-
 	return db
 }
