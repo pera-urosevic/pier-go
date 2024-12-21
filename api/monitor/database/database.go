@@ -7,38 +7,6 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-/*
-try {
-	const rows = await pier.query('SELECT * FROM `monitor`')
-	for (const row of rows) {
-		const [sensor, metric] = row.key.split(':')
-		if (!records[sensor]) records[sensor] = {}
-		records[sensor][metric] = row.value
-	}
-} catch (err) {
-	console.log(err)
-}
-const stats = records as Stats
-
-const notifications: Notifications = {}
-try {
-	const rows = await pier.query('SELECT * FROM `notify` ORDER BY `timestamp` DESC')
-	for (const row of rows) {
-		const { id, timestamp, channel, topic, message } = row
-		if (!notifications[channel]) notifications[channel] = []
-		notifications[channel].push({
-			id: id,
-			timestamp: timestamp,
-			channel: channel,
-			topic: topic,
-			message: message,
-		})
-	}
-} catch (err) {
-	console.log(err)
-}
-*/
-
 func GetData() (types.MonitorData, error) {
 	var monitorData = types.MonitorData{}
 	db := database.Connect()
