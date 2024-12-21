@@ -3,6 +3,7 @@ package api
 import (
 	"os"
 	"pier/api/brew"
+	"pier/api/monitor"
 	"pier/notify"
 )
 
@@ -20,5 +21,6 @@ func Run() {
 	notify.Info("api", addr)
 	router := customGin()
 	router = brew.Routes(router)
+	router = monitor.Routes(router)
 	router.Run(addr)
 }
