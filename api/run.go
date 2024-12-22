@@ -4,6 +4,7 @@ import (
 	"os"
 	"pier/api/brew"
 	"pier/api/monitor"
+	"pier/api/seeker"
 	"pier/notify"
 )
 
@@ -22,5 +23,6 @@ func Run() {
 	router := customGin()
 	router = brew.Routes(router)
 	router = monitor.Routes(router)
+	router = seeker.Routes(router)
 	router.Run(addr)
 }
