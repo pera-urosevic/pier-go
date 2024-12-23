@@ -34,14 +34,23 @@ func Extract(video string) (string, error) {
 			continue
 		}
 		properties := track["properties"].(map[string]interface{})
-		trackLang := properties["language"].(string)
+		var trackLang string
+		trackLangField := properties["language"]
+		if trackLangField != nil {
+			trackLang = trackLangField.(string)
+		} else {
+			trackLang = "und"
+		}
 		trackLang = strings.ToLower(trackLang)
 		if !slices.Contains(languages, trackLang) {
 			continue
 		}
-		trackName := properties["track_name"].(string)
-		if trackName == "" {
-			trackName = "subtitle"
+		var trackName string
+		trackNameField := properties["track_name"]
+		if trackNameField != nil {
+			trackName = trackNameField.(string)
+		} else {
+			trackName = "Subtitle"
 		}
 		trackJson, err := json.MarshalIndent(track, "", "  ")
 		if err != nil {
