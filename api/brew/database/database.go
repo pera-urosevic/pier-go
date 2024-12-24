@@ -3,8 +3,6 @@ package database
 import (
 	"pier/api/brew/types"
 	"pier/database"
-
-	_ "modernc.org/sqlite"
 )
 
 func GetRecipes() ([]types.Recipe, error) {

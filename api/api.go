@@ -4,8 +4,10 @@ import (
 	"os"
 	"pier/api/brew"
 	"pier/api/monitor"
+	"pier/api/reader"
 	"pier/api/seeker"
 	"pier/api/subtler"
+	"pier/lib"
 	"pier/notify"
 )
 
@@ -21,9 +23,10 @@ func Run() {
 	addr := ":" + port
 
 	notify.Info("api", addr)
-	router := customGin()
+	router := lib.CustomGin()
 	router = brew.Routes(router)
 	router = monitor.Routes(router)
+	router = reader.Routes(router)
 	router = seeker.Routes(router)
 	router = subtler.Routes(router)
 	router.Run(addr)

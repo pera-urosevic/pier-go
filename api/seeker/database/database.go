@@ -4,8 +4,6 @@ import (
 	"errors"
 	"pier/api/seeker/types"
 	"pier/database"
-
-	_ "modernc.org/sqlite"
 )
 
 func GetTargets() ([]types.Target, error) {

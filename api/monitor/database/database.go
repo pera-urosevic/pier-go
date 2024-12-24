@@ -3,8 +3,6 @@ package database
 import (
 	"pier/api/monitor/types"
 	"pier/database"
-
-	_ "modernc.org/sqlite"
 )
 
 func GetData() (types.MonitorData, error) {
