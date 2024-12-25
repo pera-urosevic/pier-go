@@ -7,6 +7,7 @@ import (
 	"pier/api/reader"
 	"pier/api/seeker"
 	"pier/api/subtler"
+	"pier/api/tvshows"
 	"pier/lib"
 	"pier/notify"
 )
@@ -29,5 +30,6 @@ func Run() {
 	router = reader.Routes(router)
 	router = seeker.Routes(router)
 	router = subtler.Routes(router)
+	router = tvshows.Routes(router)
 	router.Run(addr)
 }
