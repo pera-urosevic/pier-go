@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"time"
 
-	"pier/database"
 	"pier/notify"
 	"pier/reader/models"
+	"pier/storage"
 
 	"github.com/mmcdole/gofeed"
 )
 
 func Articles(feed *models.Feed, items []*gofeed.Item, threshold time.Duration) {
-	db := database.Connect()
+	db := storage.DB()
 
 	// get db articles
 	articles := map[string]*models.Article{}

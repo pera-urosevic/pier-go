@@ -1,15 +1,15 @@
 package storage
 
 import (
-	"pier/database"
 	"pier/notify"
 	"pier/reader/models"
+	"pier/storage"
 )
 
 func Feeds() []*models.Feed {
 	feeds := []*models.Feed{}
 
-	db := database.Connect()
+	db := storage.DB()
 	rows, err := db.Query("SELECT `name`, `url`, `disabled`, `updated` FROM `reader_feeds`")
 	if err != nil {
 		notify.ErrorAlert("reader", "get feeds", err)

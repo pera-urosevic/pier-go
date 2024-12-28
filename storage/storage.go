@@ -1,4 +1,4 @@
-package database
+package storage
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 
 var db *sql.DB
 
-func Connect() *sql.DB {
+func DB() *sql.DB {
 	if db == nil {
 		cfg := mysql.Config{
 			User:                 os.Getenv("DB_USER"),

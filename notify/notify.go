@@ -2,16 +2,15 @@ package notify
 
 import (
 	"fmt"
+	"pier/storage"
 	"time"
-
-	"pier/database"
 )
 
 // internal
 
 func notify(channel string, topic string, message string) {
 	fmt.Println(channel, topic, message)
-	db := database.Connect()
+	db := storage.DB()
 	now := time.Now()
 	_, err := db.Exec("INSERT INTO `notify` (`timestamp`, `channel`, `topic`, `message`) VALUES (?, ?, ?, ?)", now.Unix(), channel, topic, message)
 	if err != nil {

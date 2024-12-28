@@ -3,7 +3,9 @@ package api
 import (
 	"os"
 	"pier/api/brew"
+	"pier/api/database"
 	"pier/api/monitor"
+	"pier/api/proxy"
 	"pier/api/reader"
 	"pier/api/seeker"
 	"pier/api/subtler"
@@ -26,7 +28,9 @@ func Run() {
 	notify.Info("api", addr)
 	router := lib.CustomGin()
 	router = brew.Routes(router)
+	router = database.Routes(router)
 	router = monitor.Routes(router)
+	router = proxy.Routes(router)
 	router = reader.Routes(router)
 	router = seeker.Routes(router)
 	router = subtler.Routes(router)

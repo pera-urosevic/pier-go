@@ -3,12 +3,12 @@ package database
 import (
 	"errors"
 	"pier/api/seeker/types"
-	"pier/database"
+	"pier/storage"
 )
 
 func GetTargets() ([]types.Target, error) {
 	var targets = []types.Target{}
-	db := database.Connect()
+	db := storage.DB()
 	rows, err := db.Query("SELECT * FROM `seeker` ORDER BY `release` ASC, `title` ASC")
 	if err != nil {
 		return targets, err
@@ -25,7 +25,7 @@ func GetTargets() ([]types.Target, error) {
 }
 
 func CreateTarget(target types.Target) error {
-	db := database.Connect()
+	db := storage.DB()
 	_, err := db.Exec("INSERT INTO `seeker` (`title`, `sources`, `release`, `checked`,  `note`) VALUES(?, ?, ?, ?, ?)", target.Title, target.Sources, target.Release, target.Checked, target.Note)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func CreateTarget(target types.Target) error {
 }
 
 func UpdateTarget(title string, target types.Target) error {
-	db := database.Connect()
+	db := storage.DB()
 	_, err := db.Exec("UPDATE `seeker` SET `title`=?, `sources`=?, `release`=?, `checked`=?, `note`=? WHERE `title`=?", target.Title, target.Sources, target.Release, target.Checked, target.Note, title)
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func UpdateTarget(title string, target types.Target) error {
 }
 
 func RemoveTarget(title string) error {
-	db := database.Connect()
+	db := storage.DB()
 	res, err := db.Exec("DELETE FROM `seeker` WHERE `title`=?", title)
 	if err != nil {
 		return err

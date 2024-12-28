@@ -2,12 +2,12 @@ package database
 
 import (
 	"pier/api/monitor/types"
-	"pier/database"
+	"pier/storage"
 )
 
 func GetData() (types.MonitorData, error) {
 	var monitorData = types.MonitorData{}
-	db := database.Connect()
+	db := storage.DB()
 	rows, err := db.Query("SELECT * FROM `monitor`")
 	if err != nil {
 		return monitorData, err
@@ -42,7 +42,7 @@ func GetData() (types.MonitorData, error) {
 }
 
 func RemoveNotification(id int64) error {
-	db := database.Connect()
+	db := storage.DB()
 	_, err := db.Exec("DELETE FROM `notify` WHERE `id` = ?", id)
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func RemoveNotification(id int64) error {
 }
 
 func RemoveNotifications(channel string) error {
-	db := database.Connect()
+	db := storage.DB()
 	_, err := db.Exec("DELETE FROM `notify` WHERE `channel` = ?", channel)
 	if err != nil {
 		return err

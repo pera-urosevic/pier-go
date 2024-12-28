@@ -2,11 +2,11 @@ package database
 
 import (
 	"pier/api/brew/types"
-	"pier/database"
+	"pier/storage"
 )
 
 func GetRecipes() ([]types.Recipe, error) {
-	db := database.Connect()
+	db := storage.DB()
 	rows, err := db.Query("SELECT * FROM `brew` ORDER BY `name` ASC")
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func GetRecipes() ([]types.Recipe, error) {
 }
 
 func GetRecipe(id int64) (types.Recipe, error) {
-	db := database.Connect()
+	db := storage.DB()
 	row := db.QueryRow("SELECT * FROM `brew` WHERE `id` = ?", id)
 	var recipe types.Recipe
 	err := row.Scan(&recipe.ID, &recipe.Name, &recipe.Coffee, &recipe.Water, &recipe.Grind, &recipe.Time, &recipe.Notes)
@@ -35,7 +35,7 @@ func GetRecipe(id int64) (types.Recipe, error) {
 }
 
 func CreateRecipe(recipe types.Recipe) (types.Recipe, error) {
-	db := database.Connect()
+	db := storage.DB()
 	res, err := db.Exec("INSERT INTO `brew` (`name`, `coffee`, `water`, `grind`, `time`, `notes`) VALUES (?, ?, ?, ?, ?, ?)", recipe.Name, recipe.Coffee, recipe.Water, recipe.Grind, recipe.Time, recipe.Notes)
 	if err != nil {
 		return recipe, err
@@ -49,7 +49,7 @@ func CreateRecipe(recipe types.Recipe) (types.Recipe, error) {
 }
 
 func UpdateRecipe(recipe types.Recipe) (types.Recipe, error) {
-	db := database.Connect()
+	db := storage.DB()
 	res, err := db.Exec("UPDATE `brew` SET `name` = ?, `coffee` = ?, `water` = ?, `grind` = ?, `time` = ?, `notes` = ? WHERE `id` = ?", recipe.Name, recipe.Coffee, recipe.Water, recipe.Grind, recipe.Time, recipe.Notes, recipe.ID)
 	if err != nil {
 		return recipe, err
@@ -63,7 +63,7 @@ func UpdateRecipe(recipe types.Recipe) (types.Recipe, error) {
 }
 
 func RemoveRecipe(id int64) error {
-	db := database.Connect()
+	db := storage.DB()
 	_, err := db.Exec("DELETE FROM `brew` WHERE `id` = ?", id)
 	if err != nil {
 		return err

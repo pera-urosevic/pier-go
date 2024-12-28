@@ -38,6 +38,7 @@ require (
 	github.com/mmcdole/goxpp v1.1.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
