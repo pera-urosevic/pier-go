@@ -26,14 +26,17 @@ func Run() {
 	addr := ":" + port
 
 	notify.Info("api", addr)
+
 	router := lib.CustomGin()
-	router = brew.Routes(router)
-	router = database.Routes(router)
-	router = monitor.Routes(router)
-	router = proxy.Routes(router)
-	router = reader.Routes(router)
-	router = seeker.Routes(router)
-	router = subtler.Routes(router)
-	router = tvshows.Routes(router)
+
+	brew.Routes(router)
+	database.Routes(router)
+	monitor.Routes(router)
+	proxy.Routes(router)
+	reader.Routes(router)
+	seeker.Routes(router)
+	subtler.Routes(router)
+	tvshows.Routes(router)
+
 	router.Run(addr)
 }

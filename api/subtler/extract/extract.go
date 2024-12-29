@@ -22,6 +22,7 @@ func Extract(video string) (string, error) {
 	if err != nil {
 		return log, err
 	}
+
 	var info map[string]interface{}
 	json.Unmarshal(output, &info)
 
@@ -33,6 +34,7 @@ func Extract(video string) (string, error) {
 		if trackType != "subtitles" {
 			continue
 		}
+
 		properties := track["properties"].(map[string]interface{})
 		var trackLang string
 		trackLangField := properties["language"]
@@ -41,10 +43,12 @@ func Extract(video string) (string, error) {
 		} else {
 			trackLang = "und"
 		}
+
 		trackLang = strings.ToLower(trackLang)
 		if !slices.Contains(languages, trackLang) {
 			continue
 		}
+
 		var trackName string
 		trackNameField := properties["track_name"]
 		if trackNameField != nil {
@@ -52,10 +56,12 @@ func Extract(video string) (string, error) {
 		} else {
 			trackName = "Subtitle"
 		}
+
 		trackJson, err := json.MarshalIndent(track, "", "  ")
 		if err != nil {
 			return log, err
 		}
+
 		log = log + string(trackJson) + "\n"
 		id := int(track["id"].(float64))
 		subtitleTrack := types.SubtitleTrack{
@@ -64,6 +70,7 @@ func Extract(video string) (string, error) {
 			TrackLang: trackLang,
 			TrackName: trackName,
 		}
+
 		subtitleTracks = append(subtitleTracks, subtitleTrack)
 	}
 
@@ -77,12 +84,14 @@ func Extract(video string) (string, error) {
 			arg := fmt.Sprintf("%d:%s%c%s", id, extractTemp, os.PathSeparator, uuid)
 			args = append(args, arg)
 		}
+
 		log = log + fmt.Sprintf("%s %s\n", extractCmd, args)
 		run = exec.Command(extractCmd, args...)
 		output, err = run.CombinedOutput()
 		if err != nil {
 			return log, err
 		}
+
 		log = log + fmt.Sprintf("%s\n", output)
 
 		base := strings.TrimSuffix(video, ".mkv")
