@@ -19,11 +19,15 @@ func Run() {
 		return
 	}
 
+	host := os.Getenv("API_HOST")
+	if host == "" {
+		host = "0.0.0.0"
+	}
 	port := os.Getenv("API_PORT")
 	if port == "" {
 		port = "55555"
 	}
-	addr := ":" + port
+	addr := host + ":" + port
 
 	notify.Info("api", addr)
 
