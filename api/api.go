@@ -3,6 +3,7 @@ package api
 import (
 	"os"
 	"pier/api/brew"
+	"pier/api/colors"
 	"pier/api/database"
 	"pier/api/monitor"
 	"pier/api/proxy"
@@ -34,6 +35,7 @@ func Run() {
 	router := lib.CustomGin()
 
 	brew.Routes(router)
+	colors.Routes(router)
 	database.Routes(router)
 	monitor.Routes(router)
 	proxy.Routes(router)
