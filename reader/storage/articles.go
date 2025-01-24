@@ -3,6 +3,8 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
+	"slices"
 	"time"
 
 	"pier/api/reader/database/model"
@@ -17,23 +19,6 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 	if err != nil {
 		return
 	}
-
-	// get db articles
-	// articlesMap := map[string]*models.Article{}
-	// rows, err := db.Query("SELECT `id`, `content`, `discarded` FROM `reader_articles` WHERE `feed_name` = ?", feed.Name)
-	// if err != nil {
-	// 	notify.ErrorAlert("reader", "articles", err)
-	// 	return
-	// }
-
-	// defer rows.Close()
-	// for rows.Next() {
-	// 	var article models.Article
-	// 	if err := rows.Scan(&article.Id, &article.Content, &article.Discarded); err != nil {
-	// 		notify.ErrorAlert("reader", "articles", err)
-	// 	}
-	// 	articles[article.Id] = &article
-	// }
 
 	var articles []model.Article
 	res := db.Where("feed_name = ?", feed.Name).Find(&articles)
@@ -85,6 +70,8 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 			Discarded: false,
 		}
 
+		fmt.Println("// DEBUG! ", slices.Collect(maps.Keys(articlesMap)))
+		fmt.Println("// DEBUG! ", article.ID)
 		res := db.Create(&article)
 		if res.Error != nil {
 			notify.ErrorAlert("reader", "create article", res.Error)
