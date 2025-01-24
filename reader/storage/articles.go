@@ -3,8 +3,6 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
-	"maps"
-	"slices"
 	"time"
 
 	"pier/api/reader/database/model"
@@ -70,8 +68,6 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 			Discarded: false,
 		}
 
-		fmt.Println("// DEBUG! ", slices.Collect(maps.Keys(articlesMap)))
-		fmt.Println("// DEBUG! ", article.ID)
 		res := db.Create(&article)
 		if res.Error != nil {
 			notify.ErrorAlert("reader", "create article", res.Error)
