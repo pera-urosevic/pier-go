@@ -18,7 +18,7 @@ func GetData() (types.MonitorData, error) {
 		return monitorData, res.Error
 	}
 
-	res = db.Find(&monitorData.Notifications)
+	res = db.Order("timestamp asc").Find(&monitorData.Notifications)
 	if res.Error != nil {
 		return monitorData, res.Error
 	}
