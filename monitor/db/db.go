@@ -13,7 +13,7 @@ func Get(key string) string {
 	}
 
 	var stat model.Stat
-	res := db.Where("key = ?", key).Find(&stat)
+	res := db.Where("`key` = ?", key).Find(&stat)
 	if res.Error != nil {
 		return ""
 	}
@@ -37,5 +37,5 @@ func Del(key string) {
 		return
 	}
 
-	db.Where("key = ?", key).Delete(&model.Stat{})
+	db.Where("`key` like ?", key).Delete(&model.Stat{})
 }

@@ -11,7 +11,7 @@ func DiscardArticle(id string) error {
 		return err
 	}
 
-	res := db.Save(&model.Article{ID: id, Discarded: true})
+	res := db.Model(&model.Article{}).Where("id = ?", id).Update("discarded", "1")
 	if res.Error != nil {
 		return res.Error
 	}
