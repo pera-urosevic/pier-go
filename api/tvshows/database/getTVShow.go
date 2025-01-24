@@ -1,19 +1,21 @@
 package database
 
 import (
-	"pier/api/tvshows/types"
+	"pier/api/tvshows/database/model"
 	"pier/storage"
 )
 
-func GetTVShow(id int64) (types.TVShow, error) {
-	var tvshow types.TVShow
+func GetTVShow(id int64) (model.TVShow, error) {
+	var tvshow model.TVShow
 
-	db := storage.DB()
-
-	row := db.QueryRow("SELECT * FROM `tvshows` WHERE `id` = ?", id)
-	err := row.Scan(&tvshow.ID, &tvshow.Title, &tvshow.Status, &tvshow.Premiered, &tvshow.TVMaze, &tvshow.IMDB, &tvshow.Website, &tvshow.Updated, &tvshow.Episodes, &tvshow.Watching, &tvshow.Image, &tvshow.Stream, &tvshow.Runtime)
+	db, err := storage.DB()
 	if err != nil {
 		return tvshow, err
+	}
+
+	res := db.First(&tvshow, id)
+	if res.Error != nil {
+		return tvshow, res.Error
 	}
 
 	return tvshow, nil

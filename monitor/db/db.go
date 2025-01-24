@@ -2,27 +2,40 @@ package db
 
 import (
 	"fmt"
+	"pier/api/monitor/database/model"
 	"pier/storage"
 )
 
 func Get(key string) string {
-	db := storage.DB()
-	row := db.QueryRow("SELECT `value` FROM `monitor` WHERE `key` = ?", key)
-	var value string
-	err := row.Scan(&value)
-	if err == nil {
-		return value
+	db, err := storage.DB()
+	if err != nil {
+		return ""
 	}
-	return ""
+
+	var stat model.Stat
+	res := db.Where("key = ?", key).Find(&stat)
+	if res.Error != nil {
+		return ""
+	}
+
+	return stat.Value
 }
 
 func Set(key string, value interface{}) {
-	db := storage.DB()
+	db, err := storage.DB()
+	if err != nil {
+		return
+	}
+
 	valueString := fmt.Sprint(value)
 	db.Exec("INSERT INTO `monitor` (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value`=?", key, valueString, valueString)
 }
 
 func Del(key string) {
-	db := storage.DB()
-	db.Exec("DELETE FROM `monitor` WHERE `key` like ?", key)
+	db, err := storage.DB()
+	if err != nil {
+		return
+	}
+
+	db.Where("key = ?", key).Delete(&model.Stat{})
 }

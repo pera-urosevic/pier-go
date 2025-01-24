@@ -2,11 +2,10 @@ package database
 
 import (
 	"fmt"
-	"pier/storage"
 )
 
 func GetDuplicate(database string, collection string, id int64, name string) (bool, error) {
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)
 	query := fmt.Sprintf("SELECT COUNT(id) FROM %s WHERE `id`!=? AND `name`=?", table)

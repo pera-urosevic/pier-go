@@ -12,6 +12,8 @@ require (
 	github.com/joho/godotenv v1.5.1 // direct
 	github.com/mmcdole/gofeed v1.3.0 // direct
 	github.com/shirou/gopsutil/v3 v3.24.5 // direct
+	gorm.io/driver/mysql v1.5.7 // direct
+	gorm.io/gorm v1.25.12 // direct
 )
 
 require (
@@ -54,4 +56,9 @@ require (
 	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+
+require (
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 )

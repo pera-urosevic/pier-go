@@ -1,23 +1,20 @@
 package database
 
 import (
-	"pier/api/tvshows/types"
+	"pier/api/tvshows/database/model"
 	"pier/storage"
 )
 
-func CreateTVShow(record types.TVShow) (types.TVShow, error) {
-	db := storage.DB()
-
-	res, err := db.Exec("INSERT INTO `tvshows` (`title`, `status`, `premiered`, `tvmaze`, `imdb`, `website`, `updated`, `episodes`, `watching`, `image`, `stream`, `runtime`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", record.Title, record.Status, record.Premiered, record.TVMaze, record.IMDB, record.Website, record.Updated, record.Episodes, record.Watching, record.Image, record.Stream, record.Runtime)
+func CreateTVShow(record model.TVShow) (model.TVShow, error) {
+	db, err := storage.DB()
 	if err != nil {
 		return record, err
 	}
 
-	id, err := res.LastInsertId()
-	if err != nil {
-		return record, err
+	res := db.Create(&record)
+	if res.Error != nil {
+		return record, res.Error
 	}
 
-	record.ID = id
 	return record, nil
 }

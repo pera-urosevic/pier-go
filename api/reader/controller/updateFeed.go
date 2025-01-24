@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"pier/api/reader/database"
-	"pier/api/reader/types"
+	"pier/api/reader/database/model"
 	"pier/lib"
 	"strings"
 
@@ -14,7 +14,7 @@ func UpdateFeed(r *gin.Engine) {
 	r.PUT("/reader/feed/:name", func(c *gin.Context) {
 		name := c.Param("name")
 
-		var feed types.Feed
+		var feed model.Feed
 		err := c.BindJSON(&feed)
 		if err != nil {
 			lib.GinError(c, err, false)

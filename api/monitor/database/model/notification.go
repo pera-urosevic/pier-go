@@ -1,4 +1,8 @@
-package types
+package model
+
+func (Notification) TableName() string {
+	return "notify"
+}
 
 type Notification struct {
 	ID        int64  `json:"id"`
@@ -7,5 +11,3 @@ type Notification struct {
 	Topic     string `json:"topic"`
 	Message   string `json:"message"`
 }
-
-type Notifications = map[string][]Notification

@@ -2,6 +2,7 @@ package notify
 
 import (
 	"fmt"
+	"pier/api/monitor/database/model"
 	"pier/storage"
 	"time"
 )
@@ -10,15 +11,27 @@ import (
 
 func notify(channel string, topic string, message string) {
 	fmt.Println(channel, topic, message)
-	db := storage.DB()
-	now := time.Now()
-	_, err := db.Exec("INSERT INTO `notify` (`timestamp`, `channel`, `topic`, `message`) VALUES (?, ?, ?, ?)", now.Unix(), channel, topic, message)
+
+	db, err := storage.DB()
 	if err != nil {
-		fmt.Println(err)
+		return
 	}
-	db.Exec("DELETE FROM `notify` WHERE `channel`='info' AND `timestamp` < ?", now.Add(-1*time.Hour).Unix())
-	db.Exec("DELETE FROM `notify` WHERE `channel`='warn' AND `timestamp` < ?", now.Add(-1*time.Hour*24).Unix())
-	db.Exec("DELETE FROM `notify` WHERE `channel`='alert' AND `timestamp` < ?", now.Add(-1*time.Hour*24*7).Unix())
+
+	now := time.Now()
+
+	res := db.Create(&model.Notification{
+		Timestamp: now.Unix(),
+		Channel:   channel,
+		Topic:     topic,
+		Message:   message,
+	})
+	if res.Error != nil {
+		fmt.Println(res.Error)
+	}
+
+	db.Where("channel = 'info' AND timestamp < ?", now.Add(-1*time.Hour).Unix()).Delete(&model.Notification{})
+	db.Where("channel = 'warn' AND timestamp < ?", now.Add(-1*time.Hour*24).Unix()).Delete(&model.Notification{})
+	db.Where("channel = 'alert' AND timestamp < ?", now.Add(-1*time.Hour*24*7).Unix()).Delete(&model.Notification{})
 }
 
 // notifications by type

@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"pier/api/seeker/database"
-	"pier/api/seeker/types"
+	"pier/api/seeker/database/model"
 	"pier/lib"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 
 func CreateTarget(r *gin.Engine) {
 	r.POST("/seeker/target", func(c *gin.Context) {
-		var target types.Target
+		var target model.Target
 
 		err := c.BindJSON(&target)
 		if err != nil {

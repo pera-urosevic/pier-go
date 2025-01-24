@@ -1,28 +1,21 @@
 package database
 
 import (
-	"pier/api/reader/types"
+	"pier/api/reader/database/model"
 	"pier/storage"
 )
 
-func GetArticles() ([]types.Article, error) {
-	var articles = []types.Article{}
+func GetArticles() ([]model.Article, error) {
+	var articles = []model.Article{}
 
-	db := storage.DB()
-	rows, err := db.Query("SELECT * FROM `reader_articles` WHERE `discarded` = 0")
+	db, err := storage.DB()
 	if err != nil {
 		return articles, err
 	}
 
-	for rows.Next() {
-		var article types.Article
-
-		err := rows.Scan(&article.ID, &article.Content, &article.FeedName, &article.Discarded)
-		if err != nil {
-			return articles, err
-		}
-
-		articles = append(articles, article)
+	res := db.Where("discarded = ?", false).Find(&articles)
+	if res.Error != nil {
+		return articles, res.Error
 	}
 
 	return articles, nil

@@ -1,27 +1,21 @@
 package database
 
 import (
-	"pier/api/colors/types"
+	"pier/api/colors/database/model"
 	"pier/storage"
 )
 
-func GetColors() ([]types.Color, error) {
-	var colors = []types.Color{}
+func GetColors() ([]model.Color, error) {
+	var colors = []model.Color{}
 
-	db := storage.DB()
-
-	rows, err := db.Query("SELECT * FROM `colors` ORDER BY `name` ASC")
+	db, err := storage.DB()
 	if err != nil {
-		return colors, err
+		return nil, err
 	}
 
-	for rows.Next() {
-		var color types.Color
-		err := rows.Scan(&color.Name, &color.H, &color.S, &color.L)
-		if err != nil {
-			return colors, err
-		}
-		colors = append(colors, color)
+	res := db.Order("name ASC").Find(&colors)
+	if res.Error != nil {
+		return colors, res.Error
 	}
 
 	return colors, nil

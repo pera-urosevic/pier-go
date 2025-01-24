@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"pier/api/database/types"
 	"pier/lib"
-	"pier/storage"
 	"strings"
 )
 
 func UpdateDoc(database string, collection string, id int64, doc types.Doc) error {
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)
 	sets := []string{}

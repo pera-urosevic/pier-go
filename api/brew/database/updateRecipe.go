@@ -1,23 +1,20 @@
 package database
 
 import (
-	"pier/api/brew/types"
+	"pier/api/brew/database/model"
 	"pier/storage"
 )
 
-func UpdateRecipe(recipe types.Recipe) (types.Recipe, error) {
-	db := storage.DB()
-
-	res, err := db.Exec("UPDATE `brew` SET `name` = ?, `coffee` = ?, `water` = ?, `grind` = ?, `time` = ?, `notes` = ? WHERE `id` = ?", recipe.Name, recipe.Coffee, recipe.Water, recipe.Grind, recipe.Time, recipe.Notes, recipe.ID)
+func UpdateRecipe(recipe model.Recipe) (model.Recipe, error) {
+	db, err := storage.DB()
 	if err != nil {
 		return recipe, err
 	}
 
-	id, err := res.LastInsertId()
-	if err != nil {
-		return recipe, err
+	res := db.Save(&recipe)
+	if res.Error != nil {
+		return recipe, res.Error
 	}
 
-	recipe.ID = id
 	return recipe, nil
 }

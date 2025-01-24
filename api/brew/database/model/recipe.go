@@ -1,4 +1,12 @@
-package types
+package model
+
+type Tabler interface {
+	TableName() string
+}
+
+func (Recipe) TableName() string {
+	return "brew"
+}
 
 type Recipe struct {
 	ID     int64   `json:"id"`

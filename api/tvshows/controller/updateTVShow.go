@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"pier/api/tvshows/database"
-	"pier/api/tvshows/types"
+	"pier/api/tvshows/database/model"
 	"pier/lib"
 	"strconv"
 	"strings"
@@ -19,7 +19,7 @@ func UpdateTVShow(r *gin.Engine) {
 			return
 		}
 
-		var tvshow types.TVShow
+		var tvshow model.TVShow
 		err = c.BindJSON(&tvshow)
 		if err != nil {
 			lib.GinError(c, err, false)

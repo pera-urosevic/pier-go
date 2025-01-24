@@ -1,15 +1,19 @@
 package database
 
 import (
+	"pier/api/brew/database/model"
 	"pier/storage"
 )
 
 func RemoveRecipe(id int64) error {
-	db := storage.DB()
-
-	_, err := db.Exec("DELETE FROM `brew` WHERE `id` = ?", id)
+	db, err := storage.DB()
 	if err != nil {
 		return err
+	}
+
+	res := db.Delete(&model.Recipe{}, id)
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil

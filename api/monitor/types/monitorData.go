@@ -1,6 +1,8 @@
 package types
 
+import "pier/api/monitor/database/model"
+
 type MonitorData struct {
-	Stats         Stats          `json:"stats"`
-	Notifications []Notification `json:"notifications"`
+	Stats         []model.Stat         `json:"stats"`
+	Notifications []model.Notification `json:"notifications"`
 }

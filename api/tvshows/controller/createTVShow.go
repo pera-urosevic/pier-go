@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"pier/api/tvshows/database"
-	"pier/api/tvshows/types"
+	"pier/api/tvshows/database/model"
 	"pier/lib"
 	"strings"
 
@@ -12,7 +12,7 @@ import (
 
 func CreateTVShow(r *gin.Engine) {
 	r.POST("/tvshows/tvshow", func(c *gin.Context) {
-		var tvshow types.TVShow
+		var tvshow model.TVShow
 
 		err := c.BindJSON(&tvshow)
 		if err != nil {

@@ -3,13 +3,12 @@ package database
 import (
 	"fmt"
 	"pier/api/database/types"
-	"pier/storage"
 )
 
 func GetAutocompletes(database string, collection string, fields types.AutocompleteFields) (types.Autocompletes, error) {
 	autocompletes := types.Autocompletes{}
 
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("database_%s_%s", database, collection)
 	for _, field := range fields.Selects {

@@ -1,19 +1,21 @@
 package database
 
 import (
-	"pier/api/brew/types"
+	"pier/api/brew/database/model"
 	"pier/storage"
 )
 
-func GetRecipe(id int64) (types.Recipe, error) {
-	var recipe types.Recipe
+func GetRecipe(id int64) (model.Recipe, error) {
+	var recipe model.Recipe
 
-	db := storage.DB()
-
-	row := db.QueryRow("SELECT * FROM `brew` WHERE `id` = ?", id)
-	err := row.Scan(&recipe.ID, &recipe.Name, &recipe.Coffee, &recipe.Water, &recipe.Grind, &recipe.Time, &recipe.Notes)
+	db, err := storage.DB()
 	if err != nil {
-		return types.Recipe{}, err
+		return recipe, err
+	}
+
+	res := db.First(&recipe, id)
+	if res.Error != nil {
+		return recipe, res.Error
 	}
 
 	return recipe, nil

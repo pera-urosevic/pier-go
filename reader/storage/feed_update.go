@@ -1,11 +1,15 @@
 package storage
 
 import (
-	"pier/reader/models"
+	"pier/api/reader/database/model"
 	"pier/storage"
 )
 
-func FeedUpdate(feed *models.Feed) {
-	db := storage.DB()
-	db.Exec("UPDATE `reader_feeds` SET `updated` = ? WHERE `name` = ?", feed.Updated, feed.Name)
+func FeedUpdate(feed *model.Feed) {
+	db, err := storage.DB()
+	if err != nil {
+		return
+	}
+
+	db.Model(&model.Feed{}).Where("name = ?", feed.Name).Update("updated", feed.Updated)
 }

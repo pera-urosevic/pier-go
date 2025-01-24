@@ -1,16 +1,19 @@
 package database
 
 import (
-	"pier/api/colors/types"
+	"pier/api/colors/database/model"
 	"pier/storage"
 )
 
-func SetColor(color types.Color) error {
-	db := storage.DB()
-
-	_, err := db.Exec("INSERT INTO `colors` (`name`, `h`, `s`, `l`) VALUES (?, ?, ?, ?)", color.Name, color.H, color.S, color.L)
+func SetColor(color model.Color) error {
+	db, err := storage.DB()
 	if err != nil {
 		return err
+	}
+
+	res := db.Create(&color)
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil

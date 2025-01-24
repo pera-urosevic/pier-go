@@ -1,27 +1,21 @@
 package database
 
 import (
-	"pier/api/brew/types"
+	"pier/api/brew/database/model"
 	"pier/storage"
 )
 
-func GetRecipes() ([]types.Recipe, error) {
-	var recipes []types.Recipe
+func GetRecipes() ([]model.Recipe, error) {
+	var recipes []model.Recipe
 
-	db := storage.DB()
-
-	rows, err := db.Query("SELECT * FROM `brew` ORDER BY `name` ASC")
+	db, err := storage.DB()
 	if err != nil {
 		return nil, err
 	}
 
-	for rows.Next() {
-		var recipe types.Recipe
-		err := rows.Scan(&recipe.ID, &recipe.Name, &recipe.Coffee, &recipe.Water, &recipe.Grind, &recipe.Time, &recipe.Notes)
-		if err != nil {
-			return nil, err
-		}
-		recipes = append(recipes, recipe)
+	res := db.Order("name ASC").Find(&recipes)
+	if res.Error != nil {
+		return nil, res.Error
 	}
 
 	return recipes, nil

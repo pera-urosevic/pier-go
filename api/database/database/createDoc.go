@@ -3,12 +3,11 @@ package database
 import (
 	"fmt"
 	"pier/api/database/types"
-	"pier/storage"
 	"strings"
 )
 
 func CreateDoc(database string, collection string, record types.Doc) (int64, error) {
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)
 	docKeys := []string{}

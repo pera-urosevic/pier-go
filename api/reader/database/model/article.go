@@ -1,4 +1,8 @@
-package types
+package model
+
+func (Article) TableName() string {
+	return "reader_articles"
+}
 
 type Article struct {
 	ID        string `json:"id"`

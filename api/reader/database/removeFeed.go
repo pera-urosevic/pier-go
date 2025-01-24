@@ -1,15 +1,19 @@
 package database
 
 import (
+	"pier/api/reader/database/model"
 	"pier/storage"
 )
 
 func RemoveFeed(name string) error {
-	db := storage.DB()
-
-	_, err := db.Exec("DELETE FROM `reader_feeds` WHERE `name` = ?", name)
+	db, err := storage.DB()
 	if err != nil {
 		return err
+	}
+
+	res := db.Where("name = ?", name).Delete(&model.Feed{})
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil

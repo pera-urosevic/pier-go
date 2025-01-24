@@ -1,15 +1,19 @@
 package database
 
 import (
+	"pier/api/reader/database/model"
 	"pier/storage"
 )
 
 func DiscardArticle(id string) error {
-	db := storage.DB()
-
-	_, err := db.Exec("UPDATE `reader_articles` SET `discarded` = 1 WHERE `id` = ?", id)
+	db, err := storage.DB()
 	if err != nil {
 		return err
+	}
+
+	res := db.Save(&model.Article{ID: id, Discarded: true})
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil

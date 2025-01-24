@@ -3,12 +3,16 @@ package storage
 import "pier/storage"
 
 func Reload() bool {
-	db := storage.DB()
-	row := db.QueryRow("SELECT COUNT(`name`) FROM `reader_feeds` WHERE `disabled` = 0 AND `updated` = 0")
-	var value int
-	err := row.Scan(&value)
-	if err == nil {
-		return value > 0
+	db, err := storage.DB()
+	if err != nil {
+		return false
 	}
-	return false
+
+	var count int64
+	res := db.Where("disabled = 0 AND updated = 0").Count(&count)
+	if res.Error != nil {
+		return false
+	}
+
+	return count > 0
 }

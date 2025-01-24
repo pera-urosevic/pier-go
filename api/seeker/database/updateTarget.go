@@ -1,16 +1,19 @@
 package database
 
 import (
-	"pier/api/seeker/types"
+	"pier/api/seeker/database/model"
 	"pier/storage"
 )
 
-func UpdateTarget(title string, target types.Target) error {
-	db := storage.DB()
-
-	_, err := db.Exec("UPDATE `seeker` SET `title`=?, `sources`=?, `release`=?, `checked`=?, `note`=? WHERE `title`=?", target.Title, target.Sources, target.Release, target.Checked, target.Note, title)
+func UpdateTarget(title string, target model.Target) error {
+	db, err := storage.DB()
 	if err != nil {
 		return err
+	}
+
+	res := db.Where("title = ?", title).Save(&target)
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil

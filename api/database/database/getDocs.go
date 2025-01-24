@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"pier/api/database/database/util"
 	"pier/api/database/types"
-	"pier/storage"
 )
 
 func GetDocs(database string, collection string, where string, order string, offset int) ([]types.Doc, error) {
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)
 	query := fmt.Sprintf("SELECT * FROM %s WHERE %s ORDER BY %s LIMIT %d OFFSET %d", table, where, order, 100, offset)

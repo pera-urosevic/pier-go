@@ -1,27 +1,24 @@
 package storage
 
 import (
+	"pier/api/reader/database/model"
 	"pier/notify"
-	"pier/reader/models"
 	"pier/storage"
 )
 
-func Feeds() []*models.Feed {
-	feeds := []*models.Feed{}
+func Feeds() []*model.Feed {
+	feeds := []*model.Feed{}
 
-	db := storage.DB()
-	rows, err := db.Query("SELECT `name`, `url`, `disabled`, `updated` FROM `reader_feeds`")
+	db, err := storage.DB()
 	if err != nil {
 		notify.ErrorAlert("reader", "get feeds", err)
 		return feeds
 	}
-	defer rows.Close()
-	for rows.Next() {
-		var feed models.Feed
-		if err := rows.Scan(&feed.Name, &feed.Url, &feed.Disabled, &feed.Updated); err != nil {
-			notify.ErrorAlert("reader", "get feeds", err)
-		}
-		feeds = append(feeds, &feed)
+
+	res := db.Find(&feeds)
+	if res.Error != nil {
+		notify.ErrorAlert("reader", "get feeds", res.Error)
+		return feeds
 	}
 
 	return feeds

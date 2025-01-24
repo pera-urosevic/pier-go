@@ -5,30 +5,46 @@ import (
 	"fmt"
 	"time"
 
+	"pier/api/reader/database/model"
 	"pier/notify"
-	"pier/reader/models"
 	"pier/storage"
 
 	"github.com/mmcdole/gofeed"
 )
 
-func Articles(feed *models.Feed, items []*gofeed.Item, threshold time.Duration) {
-	db := storage.DB()
-
-	// get db articles
-	articles := map[string]*models.Article{}
-	rows, err := db.Query("SELECT `id`, `content`, `discarded` FROM `reader_articles` WHERE `feed_name` = ?", feed.Name)
+func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
+	db, err := storage.DB()
 	if err != nil {
-		notify.ErrorAlert("reader", "articles", err)
 		return
 	}
-	defer rows.Close()
-	for rows.Next() {
-		var article models.Article
-		if err := rows.Scan(&article.Id, &article.Content, &article.Discarded); err != nil {
-			notify.ErrorAlert("reader", "articles", err)
-		}
-		articles[article.Id] = &article
+
+	// get db articles
+	// articlesMap := map[string]*models.Article{}
+	// rows, err := db.Query("SELECT `id`, `content`, `discarded` FROM `reader_articles` WHERE `feed_name` = ?", feed.Name)
+	// if err != nil {
+	// 	notify.ErrorAlert("reader", "articles", err)
+	// 	return
+	// }
+
+	// defer rows.Close()
+	// for rows.Next() {
+	// 	var article models.Article
+	// 	if err := rows.Scan(&article.Id, &article.Content, &article.Discarded); err != nil {
+	// 		notify.ErrorAlert("reader", "articles", err)
+	// 	}
+	// 	articles[article.Id] = &article
+	// }
+
+	var articles []model.Article
+	res := db.Where("feed_name = ?", feed.Name).Find(&articles)
+	if res.Error != nil {
+		notify.ErrorAlert("reader", "articles", res.Error)
+		return
+	}
+
+	articlesMap := map[string]model.Article{}
+	for _, article := range articles {
+		articlesMap[article.ID] = article
 	}
 
 	for _, item := range items {
@@ -56,20 +72,32 @@ func Articles(feed *models.Feed, items []*gofeed.Item, threshold time.Duration) 
 		}
 		// skip articles that already exist
 		id := fmt.Sprintf("%s|%s", dt, guid)
-		_, exists := articles[id]
+		_, exists := articlesMap[id]
 		if exists {
-			delete(articles, id)
+			delete(articlesMap, id)
 			continue
 		}
 
-		// add article to db
-		db.Exec("INSERT INTO `reader_articles` (`id`, `feed_name`, `content`, `discarded`) VALUES (?, ?, ?, ?)", id, feed.Name, string(data), 0)
+		article := model.Article{
+			ID:        id,
+			FeedName:  feed.Name,
+			Content:   string(data),
+			Discarded: false,
+		}
+
+		res := db.Create(&article)
+		if res.Error != nil {
+			notify.ErrorAlert("reader", "articles", res.Error)
+		}
 	}
 
 	// delete discarded articles no longer present in feed
 	for articleId, article := range articles {
 		if article.Discarded {
-			db.Exec("DELETE FROM `reader_articles` WHERE `id` = ?", articleId)
+			res := db.Delete(&model.Article{}, articleId)
+			if res.Error != nil {
+				notify.ErrorAlert("reader", "articles", res.Error)
+			}
 		}
 	}
 }

@@ -2,11 +2,10 @@ package database
 
 import (
 	"fmt"
-	"pier/storage"
 )
 
 func GetDocsCount(database string, collection string, where string) (int, error) {
-	db := storage.DB()
+	db := DB()
 
 	var count int
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)

@@ -1,16 +1,19 @@
 package database
 
 import (
-	"pier/api/reader/types"
+	"pier/api/reader/database/model"
 	"pier/storage"
 )
 
-func UpdateFeed(name string, feed types.Feed) (types.Feed, error) {
-	db := storage.DB()
-
-	_, err := db.Exec("UPDATE `reader_feeds` SET `url` = ?, `web` = ?, `icon` = ?, `tokens` = ?, `disabled` = ?, `updated` = ?, `style` = ? WHERE `name` = ?", feed.URL, feed.Web, feed.Icon, feed.Tokens, feed.Disabled, feed.Updated, feed.Style, name)
+func UpdateFeed(name string, feed model.Feed) (model.Feed, error) {
+	db, err := storage.DB()
 	if err != nil {
 		return feed, err
+	}
+
+	res := db.Where("name = ?", name).Save(&feed)
+	if res.Error != nil {
+		return feed, res.Error
 	}
 
 	return feed, nil

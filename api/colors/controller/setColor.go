@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"pier/api/colors/database"
-	"pier/api/colors/types"
+	"pier/api/colors/database/model"
 	"pier/lib"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 
 func SetColor(r *gin.Engine) {
 	r.PUT("/colors", func(c *gin.Context) {
-		var color = types.Color{}
+		var color = model.Color{}
 		err := c.BindJSON(&color)
 		if err != nil {
 			lib.GinError(c, err, false)

@@ -1,29 +1,21 @@
 package database
 
 import (
-	"pier/api/reader/types"
+	"pier/api/reader/database/model"
 	"pier/storage"
 )
 
-func GetFeeds() ([]types.Feed, error) {
-	var feeds = []types.Feed{}
+func GetFeeds() ([]model.Feed, error) {
+	var feeds = []model.Feed{}
 
-	db := storage.DB()
-
-	rows, err := db.Query("SELECT * FROM `reader_feeds`")
+	db, err := storage.DB()
 	if err != nil {
 		return feeds, err
 	}
 
-	for rows.Next() {
-		var feed types.Feed
-
-		err := rows.Scan(&feed.Name, &feed.URL, &feed.Web, &feed.Icon, &feed.Tokens, &feed.Disabled, &feed.Updated, &feed.Style)
-		if err != nil {
-			return feeds, err
-		}
-
-		feeds = append(feeds, feed)
+	res := db.Find(&feeds)
+	if res.Error != nil {
+		return feeds, res.Error
 	}
 
 	return feeds, nil

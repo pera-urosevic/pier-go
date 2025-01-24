@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"pier/api/brew/database"
-	"pier/api/brew/types"
+	"pier/api/brew/database/model"
 	"pier/lib"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 
 func UpdateRecipe(r *gin.Engine) {
 	r.PUT("/brew/recipe", func(c *gin.Context) {
-		var recipe types.Recipe
+		var recipe model.Recipe
 
 		err := c.BindJSON(&recipe)
 		if err != nil {

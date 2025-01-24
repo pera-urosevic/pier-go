@@ -1,4 +1,12 @@
-package types
+package model
+
+type Tabler interface {
+	TableName() string
+}
+
+func (Target) TableName() string {
+	return "seeker"
+}
 
 type Target struct {
 	Title   string `json:"title"`

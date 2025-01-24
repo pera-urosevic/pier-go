@@ -1,4 +1,8 @@
-package types
+package model
+
+func (Feed) TableName() string {
+	return "reader_feeds"
+}
 
 type Feed struct {
 	Name     string `json:"name"`

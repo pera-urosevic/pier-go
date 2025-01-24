@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"pier/api/database/database/util"
 	"pier/api/database/types"
-	"pier/storage"
 )
 
 func GetDoc(database string, collection string, id int64) (types.Doc, error) {
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)
 	query := fmt.Sprintf("SELECT * FROM %s WHERE `id`=?", table)

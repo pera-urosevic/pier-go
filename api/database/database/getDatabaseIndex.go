@@ -2,11 +2,10 @@ package database
 
 import (
 	"pier/api/database/types"
-	"pier/storage"
 )
 
 func GetDatabaseIndex() ([]types.DatabaseIndex, error) {
-	db := storage.DB()
+	db := DB()
 
 	rows, err := db.Query("SELECT * FROM `databases` ORDER BY `database`, `collection` ASC")
 	if err != nil {

@@ -32,7 +32,7 @@ func task() {
 		// fetch feed
 		res, err := net.Fetch(feed)
 		if err != nil {
-			notify.ErrorAlert("reader:fetch", "fetch feed "+feed.Url, err)
+			notify.ErrorAlert("reader:fetch", "fetch feed "+feed.URL, err)
 			continue
 		}
 		feed.Updated = now.Unix()

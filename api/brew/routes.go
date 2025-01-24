@@ -11,4 +11,5 @@ func Routes(r *gin.Engine) {
 	controller.CreateRecipe(r)
 	controller.UpdateRecipe(r)
 	controller.GetRecipe(r)
+	controller.RemoveRecipe(r)
 }

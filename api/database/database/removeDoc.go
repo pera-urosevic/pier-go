@@ -2,11 +2,10 @@ package database
 
 import (
 	"fmt"
-	"pier/storage"
 )
 
 func RemoveDoc(database string, collection string, id int64) error {
-	db := storage.DB()
+	db := DB()
 
 	table := fmt.Sprintf("`database_%s_%s`", database, collection)
 	query := fmt.Sprintf("DELETE FROM %s WHERE `id`=?", table)
