@@ -38,7 +38,7 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 	var articles []model.Article
 	res := db.Where("feed_name = ?", feed.Name).Find(&articles)
 	if res.Error != nil {
-		notify.ErrorAlert("reader", "articles", res.Error)
+		notify.ErrorAlert("reader", "load articles", res.Error)
 		return
 	}
 
@@ -50,7 +50,7 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 	for _, item := range items {
 		data, err := json.Marshal(item)
 		if err != nil {
-			notify.ErrorWarn("reader", "json marshal", err)
+			notify.ErrorWarn("reader", "json marshal article data", err)
 			continue
 		}
 
@@ -87,7 +87,7 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 
 		res := db.Create(&article)
 		if res.Error != nil {
-			notify.ErrorAlert("reader", "articles", res.Error)
+			notify.ErrorAlert("reader", "create article", res.Error)
 		}
 	}
 
@@ -96,7 +96,7 @@ func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
 		if article.Discarded {
 			res := db.Delete(&model.Article{}, articleId)
 			if res.Error != nil {
-				notify.ErrorAlert("reader", "articles", res.Error)
+				notify.ErrorAlert("reader", "delete article", res.Error)
 			}
 		}
 	}

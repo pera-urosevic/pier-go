@@ -11,7 +11,7 @@ func DiscardFeed(name string) error {
 		return err
 	}
 
-	res := db.Save(&model.Article{FeedName: name, Discarded: true})
+	res := db.Model((&model.Article{})).Where("feed_name = ?", name).Update("Discarded", true)
 	if res.Error != nil {
 		return res.Error
 	}
