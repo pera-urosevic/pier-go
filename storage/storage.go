@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"database/sql"
 	"os"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func DB() (*gorm.DB, error) {
+func DB() (*gorm.DB, *sql.DB, error) {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	host := os.Getenv("DB_HOST")
@@ -18,17 +19,17 @@ func DB() (*gorm.DB, error) {
 	dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + name + "?parseTime=True"
 	db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	sqlDB, err := db.DB()
+	con, err := db.DB()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	sqlDB.SetMaxIdleConns(2)
-	sqlDB.SetMaxOpenConns(6)
-	sqlDB.SetConnMaxLifetime(time.Minute * 1)
+	con.SetMaxIdleConns(2)
+	con.SetMaxOpenConns(6)
+	con.SetConnMaxLifetime(time.Minute * 1)
 
-	return db, err
+	return db, con, err
 }

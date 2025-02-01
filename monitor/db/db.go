@@ -7,10 +7,11 @@ import (
 )
 
 func Get(key string) string {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return ""
 	}
+	defer con.Close()
 
 	var stat model.Stat
 	res := db.Where("`key` = ?", key).Find(&stat)
@@ -22,20 +23,22 @@ func Get(key string) string {
 }
 
 func Set(key string, value interface{}) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return
 	}
+	defer con.Close()
 
 	valueString := fmt.Sprint(value)
 	db.Exec("INSERT INTO `monitor` (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value`=?", key, valueString, valueString)
 }
 
 func Del(key string) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return
 	}
+	defer con.Close()
 
 	db.Where("`key` like ?", key).Delete(&model.Stat{})
 }

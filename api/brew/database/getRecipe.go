@@ -8,10 +8,11 @@ import (
 func GetRecipe(id int64) (model.Recipe, error) {
 	var recipe model.Recipe
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return recipe, err
 	}
+	defer con.Close()
 
 	res := db.First(&recipe, id)
 	if res.Error != nil {

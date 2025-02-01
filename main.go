@@ -8,6 +8,8 @@ import (
 	"pier/monitor"
 	"pier/notify"
 	"pier/reader"
+	// "net/http"
+	// _ "net/http/pprof"
 )
 
 func main() {
@@ -18,6 +20,10 @@ func main() {
 	go monitor.Run()
 	go reader.Run()
 	go api.Run()
+
+	// go func() {
+	// 	http.ListenAndServe("0.0.0.0:9999", nil)
+	// }()
 
 	done := make(chan os.Signal, 1)
 	<-done

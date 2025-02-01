@@ -6,10 +6,11 @@ import (
 )
 
 func UpdateTVShow(id int64, record model.TVShow) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Save(&record)
 	if res.Error != nil {

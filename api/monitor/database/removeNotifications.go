@@ -6,10 +6,11 @@ import (
 )
 
 func RemoveNotifications(channel string) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Where("channel = ?", channel).Delete(&model.Notification{})
 	if res.Error != nil {

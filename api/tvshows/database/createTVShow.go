@@ -6,10 +6,11 @@ import (
 )
 
 func CreateTVShow(record model.TVShow) (model.TVShow, error) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return record, err
 	}
+	defer con.Close()
 
 	res := db.Create(&record)
 	if res.Error != nil {

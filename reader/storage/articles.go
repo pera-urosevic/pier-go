@@ -13,10 +13,11 @@ import (
 )
 
 func Articles(feed *model.Feed, items []*gofeed.Item, threshold time.Duration) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return
 	}
+	defer con.Close()
 
 	var articles []model.Article
 	res := db.Where("feed_name = ?", feed.Name).Find(&articles)

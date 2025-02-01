@@ -6,10 +6,11 @@ import (
 )
 
 func RemoveTarget(title string) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Where("title = ?", title).Delete(&model.Target{})
 	if res.Error != nil {

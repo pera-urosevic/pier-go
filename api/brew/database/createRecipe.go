@@ -6,10 +6,11 @@ import (
 )
 
 func CreateRecipe(recipe model.Recipe) (model.Recipe, error) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return recipe, err
 	}
+	defer con.Close()
 
 	res := db.Create(&recipe)
 	if res.Error != nil {

@@ -6,10 +6,11 @@ import (
 )
 
 func DiscardFeed(name string) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Model((&model.Article{})).Where("feed_name = ?", name).Update("Discarded", true)
 	if res.Error != nil {

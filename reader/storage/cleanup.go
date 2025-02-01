@@ -8,10 +8,11 @@ import (
 )
 
 func Cleanup(since time.Duration) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return
 	}
+	defer con.Close()
 
 	thresholdDate := time.Now().Add(-1 * since).Format("2006-01-02")
 	res := db.Where("discarded = ? AND id < ?", true, thresholdDate).Delete(&model.Article{})

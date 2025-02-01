@@ -6,10 +6,11 @@ import (
 )
 
 func DiscardArticle(id string) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Model(&model.Article{}).Where("id = ?", id).Update("discarded", "1")
 	if res.Error != nil {

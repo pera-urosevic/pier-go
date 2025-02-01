@@ -12,10 +12,11 @@ import (
 func notify(channel string, topic string, message string) {
 	fmt.Println(channel, topic, message)
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return
 	}
+	defer con.Close()
 
 	now := time.Now()
 

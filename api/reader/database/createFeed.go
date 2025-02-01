@@ -17,10 +17,11 @@ func CreateFeed(name string) (model.Feed, error) {
 		Style:    "",
 	}
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return feed, err
 	}
+	defer con.Close()
 
 	res := db.Create(&feed)
 	if res.Error != nil {

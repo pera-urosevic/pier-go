@@ -8,10 +8,11 @@ import (
 func GetTargets() ([]model.Target, error) {
 	var targets = []model.Target{}
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return nil, err
 	}
+	defer con.Close()
 
 	res := db.Order("`release` asc").Order("`title` asc").Find(&targets)
 	if res.Error != nil {

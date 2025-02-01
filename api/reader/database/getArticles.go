@@ -8,10 +8,11 @@ import (
 func GetArticles() ([]model.Article, error) {
 	var articles = []model.Article{}
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return articles, err
 	}
+	defer con.Close()
 
 	res := db.Where("discarded = ?", false).Find(&articles)
 	if res.Error != nil {

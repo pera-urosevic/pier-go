@@ -6,10 +6,11 @@ import (
 )
 
 func RemoveTVShow(id int64) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Delete(&model.TVShow{}, id)
 	if res.Error != nil {

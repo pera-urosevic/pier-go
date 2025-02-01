@@ -6,10 +6,11 @@ import (
 )
 
 func SetColor(color model.Color) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Create(&color)
 	if res.Error != nil {

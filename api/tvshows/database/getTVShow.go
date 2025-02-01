@@ -8,10 +8,11 @@ import (
 func GetTVShow(id int64) (model.TVShow, error) {
 	var tvshow model.TVShow
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return tvshow, err
 	}
+	defer con.Close()
 
 	res := db.First(&tvshow, id)
 	if res.Error != nil {

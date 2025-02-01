@@ -6,10 +6,11 @@ import (
 )
 
 func RemoveRecipe(id int64) error {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
 	res := db.Delete(&model.Recipe{}, id)
 	if res.Error != nil {

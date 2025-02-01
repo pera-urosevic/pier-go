@@ -6,10 +6,11 @@ import (
 )
 
 func FeedUpdate(feed *model.Feed) {
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return
 	}
+	defer con.Close()
 
 	db.Model(&model.Feed{}).Where("name = ?", feed.Name).Update("updated", feed.Updated)
 }

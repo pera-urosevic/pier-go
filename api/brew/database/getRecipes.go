@@ -8,10 +8,11 @@ import (
 func GetRecipes() ([]model.Recipe, error) {
 	var recipes []model.Recipe
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return nil, err
 	}
+	defer con.Close()
 
 	res := db.Order("name ASC").Find(&recipes)
 	if res.Error != nil {

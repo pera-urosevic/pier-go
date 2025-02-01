@@ -8,10 +8,11 @@ import (
 func GetColors() ([]model.Color, error) {
 	var colors = []model.Color{}
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return nil, err
 	}
+	defer con.Close()
 
 	res := db.Order("name ASC").Find(&colors)
 	if res.Error != nil {

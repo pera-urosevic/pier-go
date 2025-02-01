@@ -9,11 +9,12 @@ import (
 func Feeds() []*model.Feed {
 	feeds := []*model.Feed{}
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		notify.ErrorAlert("reader", "get feeds", err)
 		return feeds
 	}
+	defer con.Close()
 
 	res := db.Find(&feeds)
 	if res.Error != nil {

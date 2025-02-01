@@ -8,10 +8,11 @@ import (
 func GetFeeds() ([]model.Feed, error) {
 	var feeds = []model.Feed{}
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return feeds, err
 	}
+	defer con.Close()
 
 	res := db.Find(&feeds)
 	if res.Error != nil {

@@ -8,10 +8,11 @@ import (
 func GetTVShows() ([]model.TVShow, error) {
 	var tvshows []model.TVShow
 
-	db, err := storage.DB()
+	db, con, err := storage.DB()
 	if err != nil {
 		return nil, err
 	}
+	defer con.Close()
 
 	res := db.Find(&tvshows)
 	if res.Error != nil {
