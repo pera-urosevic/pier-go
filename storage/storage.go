@@ -3,7 +3,6 @@ package storage
 import (
 	"database/sql"
 	"os"
-	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -26,10 +25,6 @@ func DB() (*gorm.DB, *sql.DB, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-
-	con.SetMaxIdleConns(2)
-	con.SetMaxOpenConns(6)
-	con.SetConnMaxLifetime(time.Minute * 1)
 
 	return db, con, err
 }
